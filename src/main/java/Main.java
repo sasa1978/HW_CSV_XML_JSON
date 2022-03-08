@@ -31,18 +31,17 @@ public class Main {
         System.out.printf(list.toString());
     }
 
-    private static List<Employee> jsonToList(String json) {
+    private static <jsonElement> List<Employee> jsonToList(String json) {
         List<Employee> staff = new ArrayList<>();
 
         JSONParser parser = new JSONParser();
         try {
             Object object = parser.parse(json);
             JSONArray jsonArray = (JSONArray) object;
-            for (int i = 0; i < jsonArray.size(); i++) {
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-                Employee employee = gson.fromJson(((JSONObject) jsonArray.get(i)).toJSONString(), Employee.class);
-                staff.add(employee);
+            GsonBuilder builder = new GsonBuilder();
+            Gson gson = builder.create();
+            for (Object obj: jsonArray) {
+                staff.add(gson.fromJson(obj.toString(), Employee.class));
             }
         } catch (ParseException e) {
             e.printStackTrace();
